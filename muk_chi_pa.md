@@ -18,7 +18,7 @@
     - style.css.map
     - style.scss
         > map 파일과 scss에 대한 설명    
-        https://github.com/gshin-a/TIL/blob/main/2303/230310.md
+        https://github.com/gshin-a/TIL/blob/main/2303/230310.md#%EC%9D%B4%EC%8A%88
 - images
     - computer_paper.png
     - computer_rock.png
@@ -35,7 +35,7 @@
     - handleLoadWindow
         - 페이지가 로딩되면 실행되는 onload 이벤트 함수
         - 페이지의 모든 요소들이 준비되어야 호출됨    
-        (window.onload에 대한 설명 : https://itworldyo.tistory.com/101)
+            > window.onload에 대한 설명 : https://itworldyo.tistory.com/101
         - 동작    
             - 사이트에 들어오면 게임 설명문이 나타나게 함
 - 게임 설명 동작(onclick)
@@ -212,4 +212,7 @@
         showResult-->result(종료 : 유저가승리함)
         ```
 - 사용된 메서드
-    - event.stopPropagation()
+    - event.stopPropagation()    
+        - 이벤트의 전파를 중단시킴. 즉, bubbling과 capturing 중단
+        - bubbling: 상위요소로 event가 전파되는 것
+        - capturing: 하위요소로 event가 전파되는 것
