@@ -28,3 +28,51 @@
     - won.png
 ---
 ## script.js
+
+- 사이트 동작
+    - handleLoadWindow
+- 게임 설명 동작(onclick)
+    - handleClickDocumentWrap
+
+- 게임 동작
+    ```mermaid
+    graph LR
+    A[handleClickStart]-->init
+    A-->B[startTimer]
+    A-->showVersusWrapAndUserSelectionWrap
+    A-->C[startRound]
+
+    B[startTimer]-->|startCount*1000|B_d[delay]
+
+    C[startRound]-->|true|setUserSelectionButtonDisabled
+    C-->setSignal
+    C-->D[fight]
+
+    D[fight]-->|currentWinner가 'user'일 때|E_1[유저가이기고있을때규칙]
+    D-->|currentWinner가 'user'가 아닐 때|E_2[컴퓨터가이기고있을때규칙]
+    D-->|term|D_d[delay]
+    D-->mukChiPaRule
+    D-->F[decideWinner]
+
+    E_1[유저가이기고있을때규칙]-->|false|E_1_s[setUserSelectionButtonDisabled]
+    E_1-->|ms,setComputerStatus|E_1_d[delay]
+    E_1_d-->E_1_d_s[setComputerStatus]-->|computerStatus,'computer'|setThirdSignalInnerHtml
+
+    E_2[컴퓨터가이기고있을때규칙]-->|ms-term,setUserSelectionButtonDisabled:false|E_2_d_1[delay]
+    E_2_d_1-->|false|E_2_d_1_s[setUserSelectionButtonDisabled]
+    E_2-->|term,setComputerStatus|E_2_d_2[delay]
+    E_2_d_2-->E_2_d_2_s[setComputerStatus]-->|computerStatus,'computer'|setThirdSignalInnerHtml
+
+    F[decideWinner]-->|winner가 'computer'일 때 : 'defeated'|showResult
+    F-->|winner가 : 'user'일 때 won'|showResult
+    F-.->|winner가 'computer'와 'user'가 아닐 때|C
+    ```
+
+    - 버튼 동작(onclick)
+        - handleClickStart
+            - start button을 클릭하면 실행되는 함수
+        - setUserStatus : 'rock' / 'scissors' / 'paper'
+            - 가위, 바위, 보 버튼 중 하나를 클릭하면 실행되는 함수
+    - init
+    - showVersusWrapAndUserSelectionWrap
+    - startRound
