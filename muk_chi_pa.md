@@ -17,6 +17,8 @@
     - style.css
     - style.css.map
     - style.scss
+        > map 파일과 scss에 대한 설명    
+        https://github.com/gshin-a/TIL/blob/main/2303/230310.md
 - images
     - computer_paper.png
     - computer_rock.png
@@ -159,7 +161,7 @@
     - setThirdSignalInnerHtml
         - 현재 게임이 묵찌빠일 때 세 번째 신호를 보여줌
 - 게임 진행 예시
-    1. 가위바위보에서 유저가 승리하고 묵찌빠에서 유저와 컴퓨터의 선택이 같아 유저가 최종승리했을 경우
+    - 가위바위보에서 유저가 승리하고 묵찌빠에서 유저와 컴퓨터의 선택이 같아 유저가 최종승리했을 경우
         1. 유저가 start button을 클릭하여 게임을 실행함
         2. 3초의 타이머가 실행된 후 가위바위보 시그널과 함께 버튼이 생성됨
         3. 유저가 가위바위보를 선택하여 컴퓨터와 대결하여 승리함(유저는 '가위', 컴퓨터는 '보'로 가정함)
@@ -169,27 +171,45 @@
         7. TRY AGAIN 버튼이 생성됨
         ```mermaid
         graph TD
+        user(유저startbutton클릭)-->handleClickStart
         handleClickStart-->init
         handleClickStart-->startTimer
         handleClickStart-->showVersusWrapAndUserSelectionWrap
-        handleClickStart-->startRound
+        handleClickStart-->startRound:가위바위보
 
         startTimer-->|3초|delay
-        startRound-->|true|setUserSelectionButtonDisabled
+
+        startRound:가위바위보-->|true|setUserSelectionButtonDisabled
+        startRound:가위바위보-->setSignal
+        startRound:가위바위보-->fight
+
+        fight-->컴퓨터가이기고있을때규칙
+        fight-->|0.5초|f_d[delay]
+        fight-->mukChiPaRule
+        fight-->decideWinner
+
+        컴퓨터가이기고있을때규칙-->|2.5초,setUserSelectionButtonDisabled|컴_d[delay]
+        컴_d[delay]-->|false|컴_d_se[setUserSelectionButtonDisabled]
+        컴퓨터가이기고있을때규칙-->|0.5초,setComputerStatus|컴_d2[delay]
+        컴_d2[delay]-->setComputerStatus
+        setComputerStatus-->|'보','computer'|setThirdSignalInnerHtml
+
+        decideWinner-->startRound:묵찌빠
+
+        startRound:묵찌빠-->|true|s_2[setUserSelectionButtonDisabled]
+        startRound:묵찌빠-->sg_2[setSignal]
+        startRound:묵찌빠-->f_2[fight]
+
+        f_2[fight]-->유저가이기고있을때규칙
+        유저가이기고있을때규칙-->|false|유_se[setUserSelectionButtonDisabled]
+        유저가이기고있을때규칙-->|3초,setComputerStatus|유_d[delay]
+        유_d[delay]-->유_d_se[setComputerStatus]
+        유_d_se[setComputerStatus]-->|'빠','computer'|유_d_se_third[setThirdSignalInnerHtml]
+        f_2[fight]-->|0.5초|f_2_d[delay]
+        f_2[fight]-->f_2_muk[mukChiPaRule]
+        f_2[fight]-->f_2_de[decideWinner]
+        f_2_de[decideWinner]-->|'won'|showResult
+        showResult-->result(종료 : 유저가승리함)
         ```
-    2. 유저가 가위바위보를 제출하지 않아 패배한 경우
-        1. 유저가 start button을 클릭하여 게임을 실행함
-        2. 3초의 타이머가 실행된 후 가위바위보 시그널과 함께 버튼이 생성됨
-        3. 유저가 가위바위보를 선택하지 않아 유저가 패배함
-        7. TRY AGAIN 버튼이 생성됨
-    3. 가위바위보에서 비겨 다시 가위바위보를 진행하고, 가위바위보와 묵찌빠 모두 유저가 패배하여 최종패배하는 경우
-        1. 유저가 start button을 클릭하여 게임을 실행함
-        2. 3초의 타이머가 실행된 후 가위바위보 시그널과 함께 버튼이 생성됨
-        3. 유저가 가위바위보를 선택하여 컴퓨터와 대결하여 비김(유저와 컴퓨터 모두 '가위'로 가정함)
-        4. 가위바위보를 다시 수행함(2번 과정 반복)
-        5. 유저가 가위바위보를 선택하여 컴퓨터와 대결하여 패배함(유저는 '보', 컴퓨터는 '가위'로 가정함)
-        6. 묵찌빠 신호가 나오며 버튼이 생성됨
-        7. 유저의 선택과 컴퓨터의 랜덤값이 일치하여 컴퓨터가 게임에서 최종승리함(유저는 '빠', 컴퓨터는 '빠'로 가정함)
-        8. TRY AGAIN 버튼이 생성됨
 - 사용된 메서드
     - event.stopPropagation()
