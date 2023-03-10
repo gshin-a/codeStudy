@@ -216,3 +216,4 @@
         - 이벤트의 전파를 중단시킴. 즉, bubbling과 capturing 중단
         - bubbling: 상위요소로 event가 전파되는 것
         - capturing: 하위요소로 event가 전파되는 것
+        > 참고 https://github.com/gshin-a/TIL/blob/main/2303/230310.md#til-230310%EA%B8%88
